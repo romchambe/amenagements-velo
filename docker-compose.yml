@@ -4,10 +4,12 @@ services:
   db:
     container_name: mvav-db
     image: postgis/postgis
+    ports:
+      - 5432:5432
     volumes:
       - mvav_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=mvav-dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     healthcheck:
@@ -21,9 +23,9 @@ services:
     volumes:
       - .:/app
     ports:
-      - "8000:8000"
+      - 8000:8000
     environment:
-      - POSTGRES_NAME=postgres
+      - POSTGRES_DB=mvav-dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     depends_on:
