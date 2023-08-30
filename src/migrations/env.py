@@ -1,4 +1,3 @@
-import sys
 from logging.config import fileConfig
 from geoalchemy2 import alembic_helpers
 from sqlalchemy import engine_from_config, pool
@@ -43,9 +42,6 @@ def custom_include_obj(obj, name, obj_type, reflected, compare_to):
     ) or not alembic_helpers.include_object(obj, name, obj_type, reflected, compare_to):
         return False
     return True
-
-
-sys.path.append("..")
 
 
 # this is the Alembic Config object, which provides

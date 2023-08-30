@@ -91,3 +91,10 @@ def downgrade() -> None:
     op.drop_geospatial_index('idx_cycling_features_geometry',
                              table_name='cycling_features', postgresql_using='gist', column_name='geometry')
     op.drop_table('cycling_features')
+    op.execute("DROP TYPE amenagement;")
+    op.execute("DROP TYPE revetement;")
+    op.execute("DROP TYPE statut;")
+    op.execute("DROP TYPE sens;")
+    op.execute("DROP TYPE regime;")
+    op.execute("DROP TYPE acces;")
+    op.execute("DROP TYPE emplacement;")

@@ -1,8 +1,7 @@
-from fastapi import FastAPI
-from geopandas import GeoDataFrame
-from geojsplit import geojsplit
-from pathlib import Path
-from .core.database import engine
+from fastapi import FastAPI, Depends
+from .cycling_features.refresh_features import refresh_features
+from sqlalchemy.orm import Session
+from .core.database import get_db
 
 app = FastAPI()
 
@@ -13,32 +12,5 @@ def read_root():
 
 
 @app.get("/refresh_cycling_features")
-def update_cycling_features():
-    geojson = geojsplit.GeoJSONBatchStreamer(
-        Path().joinpath("data", "amenagements.geojson")
-    )
-
-    rows_count = 0
-
-    for features in geojson.stream(batch=100):
-        dataframe = GeoDataFrame.from_features(features, crs='EPSG:4326')
-        dataframe.reset_index()
-        dataframe['id'] = dataframe.index + rows_count
-
-        try:
-            dataframe.to_postgis(
-                name='cycling_features',
-                con=engine,
-                if_exists='append'
-            )
-        except:
-            dataframe.to_csv(
-                Path().joinpath(
-                    'data',
-                    f"failed_{rows_count}.csv"
-                )
-            )
-
-        rows_count += len(dataframe.index)
-
-    print('Count:', rows_count)
+def refresh_cycling_features(db: Session = Depends(get_db)):
+    refresh_features(db)

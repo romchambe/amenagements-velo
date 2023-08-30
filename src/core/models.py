@@ -42,3 +42,11 @@ class CyclingFeature(Base):
 
 # Schema des aménagements cyclables
 # https://schema.data.gouv.fr/schemas/etalab/schema-amenagements-cyclables/0.3.4/schema_amenagements_cyclables.json
+
+
+class CyclingFeatureRevision(Base):
+    __tablename__ = "cycling_features_revisions"
+    id = Column(Integer, primary_key=True, index=True)
+    external_id = Column(String, nullable=False)
+    url = Column(String, nullable=False)
+    date_refreshed = Column(Date, nullable=False)
