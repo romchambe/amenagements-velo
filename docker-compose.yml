@@ -18,10 +18,10 @@ services:
       retries: 10
       timeout: 1s
   backend:
-    container_name: mvav-backend
-    build: .
+    container_name: backend
+    build: ./backend
     volumes:
-      - .:/code
+      - ./backend:/code
     ports:
       - 8000:8000
     environment:
@@ -31,6 +31,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  web-client: 
+    container_name: web-client
+    build: ./web-client
+    command: yarn dev --port 3000
+    volumes:
+      - ./web-client:/code
+      # this is needed so that node_modules are not erased by the host volume when starting the container 
+      - /code/node_modules
+    ports: 
+      - 3000:3000
 
 volumes:
   mvav_data:

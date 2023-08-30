@@ -5,4 +5,4 @@ set -e
 docker volume create --name mvav_data -d local
 
 # start docker container
-docker-compose -f docker-compose.local.yml up --build --remove-orphans
+docker-compose up --build --remove-orphans
