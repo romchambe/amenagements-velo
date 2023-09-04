@@ -1,0 +1,17 @@
+{
+  "name": "Backend",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "backend",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance"
+      ]
+    }
+  },
+  "shutdownAction": "none",
+  "workspaceFolder": "/code/backend"
+}

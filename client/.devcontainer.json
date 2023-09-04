@@ -1,0 +1,17 @@
+{
+  "name": "client",
+  "dockerComposeFile": [
+    "../docker-compose.yml"
+  ],
+  "service": "client",
+  "shutdownAction": "none",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+  "workspaceFolder": "/code/client"
+}
