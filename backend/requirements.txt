@@ -6,3 +6,4 @@ geojsplit
 SQLAlchemy
 alembic
 GeoAlchemy2
+geojson-pydantic

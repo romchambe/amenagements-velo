@@ -1,5 +1,5 @@
 {
-  "name": "client",
+  "name": "Client",
   "dockerComposeFile": [
     "../docker-compose.yml"
   ],
@@ -9,7 +9,8 @@
     "vscode": {
       "extensions": [
         "dbaeumer.vscode-eslint",
-        "esbenp.prettier-vscode"
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker"
       ]
     }
   },
