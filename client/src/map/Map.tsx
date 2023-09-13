@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { CyclingFeaturesProvider } from "./CyclingFeaturesProvider";
 
 export function Map() {
+  console.log("render root");
   return (
     <MapContainer
       center={[43.4945, -1.4737]}

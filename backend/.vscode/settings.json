@@ -4,5 +4,6 @@
   },
   "python.analysis.extraPaths": [
     "/usr/local/miniconda3/lib/python3.11/site-packages"
-  ]
+  ],
+  "python.formatting.provider": "none"
 }

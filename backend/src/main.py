@@ -31,7 +31,7 @@ def refresh_cycling_features(db: Session = Depends(get_db)):
     refresh_features(db)
 
 
-@app.get("/features/within_bounds/")
+@app.get("/features/within_bounds")
 def get_features_within_bounds(
     north_east: Annotated[list[float], Query()],
     south_west: Annotated[list[float], Query()],

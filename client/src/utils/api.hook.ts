@@ -100,6 +100,6 @@ export const useApi: FetchApiHook = <D, P>(endpoint: GetEndpointFunc) => {
     },
     [endpoint],
   );
-  console.log(state);
+
   return { ...state, fetchApi };
 };
