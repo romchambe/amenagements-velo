@@ -3,12 +3,10 @@ import "leaflet/dist/leaflet.css";
 import { CyclingFeaturesProvider } from "./CyclingFeaturesProvider";
 
 export function Map() {
-  console.log("render root");
   return (
     <MapContainer
       center={[43.4945, -1.4737]}
-      zoom={14}
-      minZoom={13}
+      zoom={10}
       style={{ width: "100%", height: "100%" }}
     >
       <TileLayer

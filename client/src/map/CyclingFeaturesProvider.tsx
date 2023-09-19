@@ -48,22 +48,19 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
   const loadFeatures = useCallback(
     (map: Map) => {
       const zoom = map.getZoom();
+      const params = { ...getFormattedBounds(map.getBounds()), zoom };
 
-      if (zoom >= 14) {
-        const params = getFormattedBounds(map.getBounds());
-
-        fetchApi({
-          config: {
-            params,
-            paramsSerializer: (params) =>
-              qs.stringify(params, { arrayFormat: "repeat" }),
-          },
-        });
-      }
+      fetchApi({
+        config: {
+          params,
+          paramsSerializer: (params) =>
+            qs.stringify(params, { arrayFormat: "repeat" }),
+        },
+      });
     },
     [map],
   );
-
+  console.log("number of feat", data?.features.length, data?.features[0]);
   useEffect(() => {
     loadFeatures(map);
   }, []);

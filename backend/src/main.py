@@ -35,10 +35,11 @@ def refresh_cycling_features(db: Session = Depends(get_db)):
 def get_features_within_bounds(
     north_east: Annotated[list[float], Query()],
     south_west: Annotated[list[float], Query()],
+    zoom: int,
     db: Session = Depends(get_db)
 ) -> FeatureCollection:
     features = get_features(
-        db, [south_west[0], south_west[1], north_east[0], north_east[1]]
+        db, [south_west[0], south_west[1], north_east[0], north_east[1]], zoom
     )
 
     return FeatureCollection(type="FeatureCollection", features=features)
