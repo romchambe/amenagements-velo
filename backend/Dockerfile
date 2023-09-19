@@ -16,7 +16,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN conda install --channel conda-forge geopandas
 
 # Install standard python deps and start server
-WORKDIR /code
+WORKDIR /code/backend
 
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

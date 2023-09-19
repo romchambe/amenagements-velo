@@ -5,10 +5,5 @@
   "python.analysis.extraPaths": [
     "/usr/local/miniconda3/lib/python3.11/site-packages"
   ],
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  "python.formatting.provider": "none"
 }
