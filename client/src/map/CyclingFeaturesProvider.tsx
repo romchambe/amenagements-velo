@@ -47,8 +47,7 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
 
   const loadFeatures = useCallback(
     (map: Map) => {
-      const zoom = map.getZoom();
-      const params = { ...getFormattedBounds(map.getBounds()), zoom };
+      const params = getFormattedBounds(map.getBounds());
 
       fetchApi({
         config: {
@@ -60,7 +59,7 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
     },
     [map],
   );
-  console.log("number of feat", data?.features.length, data?.features[0]);
+
   useEffect(() => {
     loadFeatures(map);
   }, []);
