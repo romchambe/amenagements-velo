@@ -5,10 +5,11 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useState,
 } from "react";
 import { useMapEvents } from "react-leaflet";
 import { useApi } from "../utils/api.hook";
-import { HttpVerb } from "../utils/api";
+import { HttpVerb, WithToken } from "../utils/api";
 import { getFormattedBounds } from "../utils/geo";
 import * as qs from "qs";
 import { Map } from "leaflet";
@@ -32,8 +33,13 @@ const FeaturesContext = createContext<{
 export const useFeaturesContext = () => useContext(FeaturesContext);
 
 export const CyclingFeaturesProvider: FC<Props> = memo(() => {
-  const { fetchApi, data } = useApi<
-    FeatureCollection<InternalFeatureProperties>
+  const [token, setToken] = useState<string | null>(null);
+  const [features, setFeatures] = useState<
+    Feature<InternalFeatureProperties>[]
+  >([]);
+
+  const { fetchApi, loading, data } = useApi<
+    WithToken & { collection: FeatureCollection<InternalFeatureProperties> }
   >(() => ({
     url: "/features/within_bounds",
     method: HttpVerb.GET,
@@ -48,24 +54,45 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
   const loadFeatures = useCallback(
     (map: Map) => {
       const params = getFormattedBounds(map.getBounds());
+      const headers = token
+        ? {
+            "X-Client-Token": token,
+          }
+        : {};
 
       fetchApi({
         config: {
+          headers,
           params,
-          paramsSerializer: (params) =>
+          paramsSerializer: (params: any) =>
             qs.stringify(params, { arrayFormat: "repeat" }),
         },
       });
     },
-    [map],
+    [map, token],
   );
 
   useEffect(() => {
-    loadFeatures(map);
+    if (!loading) {
+      loadFeatures(map);
+    }
   }, []);
 
+  useEffect(() => {
+    if (data?.client_token && data.client_token !== token) {
+      setToken(data.client_token);
+    }
+
+    if (data?.collection.features) {
+      setFeatures((prevFeatures) => [
+        ...prevFeatures,
+        ...data?.collection.features,
+      ]);
+    }
+  }, [data]);
+
   return (
-    <FeaturesContext.Provider value={{ features: data?.features || [] }}>
+    <FeaturesContext.Provider value={{ features }}>
       <FeaturePainter />
     </FeaturesContext.Provider>
   );

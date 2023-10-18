@@ -1,46 +1,59 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.engine.row import Row
 from ..core.models import CyclingFeature
-from ..core.request import WithToken
 from geojson_pydantic import Feature, FeatureCollection
-from geoalchemy2 import functions, Geography
+from geoalchemy2 import functions
 import json
-from shapely import Point, distance
-from math import pi
+from shapely import Polygon, unary_union, wkb
+from ..core.cache import cache
 from pydantic import BaseModel
+from geopandas import GeoSeries
 
 EARTH_RADIUS = 6378137
 
 
-class GetFeaturesResponse(BaseModel, WithToken):
-    features: FeatureCollection
+class GetFeaturesResponse(BaseModel):
+    client_token: str
+    collection: FeatureCollection
 
 
 def parse_feat(f: Row):
     return Feature(**json.loads(f[0]))
 
 
-def get_features(db: Session, bounds: list[float]) -> FeatureCollection:
-    south_west = Point(bounds[0], bounds[1])
-    north_east = Point(bounds[2], bounds[3])
+def get_features(db: Session, requested_polygon: Polygon, client_id: int) -> FeatureCollection:
+    cached = cache.get_item(client_id)
 
-    radius = distance(south_west, north_east)
-    metric_dist = 2 * pi * radius * EARTH_RADIUS / 360
-
-    filters = [CyclingFeature.geometry.intersects(
-        functions.ST_MakeEnvelope(*bounds)
-    )]
-
-    if metric_dist >= 20000:
-        filters.append(
-            functions.ST_Length(
-                CyclingFeature.geometry.cast(Geography)
-            ) > min(metric_dist / 200, 1500)
+    if cached is None:
+        query_polygon = requested_polygon
+    elif cached.polygon.contains(requested_polygon):
+        print('container', cached.polygon.boundary)
+        return FeatureCollection(
+            type="FeatureCollection",
+            features=[]
         )
+    else:
+        query_polygon: Polygon = requested_polygon.difference(cached.polygon)
+        print('difference', query_polygon.boundary)
 
     query = db.query(functions.ST_AsGeoJSON(CyclingFeature)).filter(
-        *filters
+        functions.ST_Within(
+            CyclingFeature.geometry,
+            wkb.dumps(query_polygon, hex=True, srid=4326)
+        )
     )
+
+    if cached is None:
+        cache.upsert_polygon_item(
+            client_id, requested_polygon
+        )
+    else:
+        cache.upsert_polygon_item(
+            client_id,
+            unary_union(
+                [cached.polygon, requested_polygon]
+            )
+        )
 
     return FeatureCollection(
         type="FeatureCollection",

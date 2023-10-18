@@ -1,17 +1,16 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import os
 import jwt
+from dotenv import load_dotenv
+from .cache import cache
 
 
+load_dotenv()
 jwt_secret = os.getenv("JWT_SECRET_KEY")
 
 
-class WithToken:
-    request_token: str
-
-
 def encode_jwt(payload: dict[str, str]) -> str:
-    return jwt.encode(payload, jwt_secret)
+    return jwt.encode(payload, jwt_secret, algorithm="HS256")
 
 
 def decode_token(token) -> str:
@@ -23,15 +22,14 @@ def decode_token(token) -> str:
         algorithms=[token_data['alg'], ],
         options={"require": ["exp", "sub"]}
     )
-
+    print('payload', payload)
     return payload['sub']
 
 
-def create_token() -> tuple[str, str]:
-    # Create cache key with expiration
-    id = 'test'
-
+def create_token() -> tuple[int, str]:
+    id = cache.get_next_id()
+    print(id)
     return id, encode_jwt({
         'sub': id,
-        'exp': datetime.now() + timedelta(hours=1)
+        'exp': int((datetime.now(tz=timezone.utc) + timedelta(hours=1)).timestamp())
     })
