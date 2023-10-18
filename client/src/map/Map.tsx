@@ -6,7 +6,7 @@ export function Map() {
   return (
     <MapContainer
       center={[43.4945, -1.4737]}
-      zoom={10}
+      zoom={13}
       style={{ width: "100%", height: "100%" }}
     >
       <TileLayer

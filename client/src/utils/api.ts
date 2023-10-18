@@ -7,6 +7,10 @@ export enum HttpVerb {
   PATCH = "patch",
 }
 
+export interface WithToken {
+  client_token: string;
+}
+
 const DEV_API_BASE_URL = "http://localhost:8000";
 
 export const getApiBaseUrl = () => DEV_API_BASE_URL;
