@@ -1,17 +1,55 @@
 import { LatLngExpression } from "leaflet";
-import { Polyline } from "react-leaflet";
+import { Polyline, Popup } from "react-leaflet";
+import { InternalFeatureProperties } from "./feature.type";
+import { useState } from "react";
+import { useFeaturesContext } from "./CyclingFeaturesProvider";
 
 interface FeatureProps {
-  id: number;
   positions: LatLngExpression[];
+  properties: InternalFeatureProperties;
 }
 
-export const Feature = ({ positions }: FeatureProps) => {
+const getLineWeight = (zoom: number) => {
+  if (zoom <= 11) {
+    return 1;
+  }
+  if (zoom <= 12) {
+    return 1.5;
+  }
+  if (zoom <= 13) {
+    return 2;
+  }
+
+  if (zoom <= 15) {
+    return 3;
+  }
+
+  if (zoom <= 16) {
+    return 3.5;
+  } else return 4;
+};
+
+export const Feature = ({ positions, properties }: FeatureProps) => {
+  const [hovered, setHovered] = useState(false);
+  const { zoomLevel } = useFeaturesContext();
+
   return (
     <Polyline
-      key={"toto"}
       positions={positions}
-      pathOptions={{ color: "#5CFFB0" }}
-    />
+      pathOptions={{
+        color: hovered ? "yellow" : "#00F57E",
+        weight: getLineWeight(zoomLevel),
+      }}
+      eventHandlers={{
+        mouseover: () => {
+          setHovered(true);
+        },
+        mouseout: () => {
+          setHovered(false);
+        },
+      }}
+    >
+      <Popup>{JSON.stringify(properties)}</Popup>
+    </Polyline>
   );
 };

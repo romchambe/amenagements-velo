@@ -7,5 +7,4 @@ SQLAlchemy
 alembic
 GeoAlchemy2
 geojson-pydantic
-python-dotenv
 PyJWT

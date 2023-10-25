@@ -26,17 +26,21 @@ type Props = {
 
 const FeaturesContext = createContext<{
   features: Feature<InternalFeatureProperties>[];
+  zoomLevel: number;
 }>({
   features: [],
+  zoomLevel: 13,
 });
 
 export const useFeaturesContext = () => useContext(FeaturesContext);
 
 export const CyclingFeaturesProvider: FC<Props> = memo(() => {
   const [token, setToken] = useState<string | null>(null);
+  const [zoomLevel, setZoomLevel] = useState(13);
+
   const [features, setFeatures] = useState<
-    Feature<InternalFeatureProperties>[]
-  >([]);
+    Record<number, Feature<InternalFeatureProperties>>
+  >({});
 
   const { fetchApi, loading, data } = useApi<
     WithToken & { collection: FeatureCollection<InternalFeatureProperties> }
@@ -48,6 +52,13 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
   const map = useMapEvents({
     moveend: () => {
       loadFeatures(map);
+    },
+
+    zoomend: ({ target }) => {
+      if (zoomLevel !== target._zoom) {
+        console.log(target._zoom);
+        setZoomLevel(target._zoom);
+      }
     },
   });
 
@@ -84,15 +95,25 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
     }
 
     if (data?.collection.features) {
-      setFeatures((prevFeatures) => [
-        ...prevFeatures,
-        ...data?.collection.features,
-      ]);
+      const nextFeatures = data?.collection.features;
+      setFeatures((prevFeaturesStore) => {
+        const nextFeaturesStore = nextFeatures.reduce<
+          Record<number, Feature<InternalFeatureProperties>>
+        >((store, feature) => {
+          store[feature.properties.id] = feature;
+
+          return store;
+        }, {});
+
+        return { ...prevFeaturesStore, ...nextFeaturesStore };
+      });
     }
   }, [data]);
 
   return (
-    <FeaturesContext.Provider value={{ features }}>
+    <FeaturesContext.Provider
+      value={{ features: Object.values(features), zoomLevel }}
+    >
       <FeaturePainter />
     </FeaturesContext.Provider>
   );

@@ -28,8 +28,6 @@ def check_latest_version() -> OpenCyclingFeaturesVersion:
         reverse=True
     )[0]
 
-    print(parser.parse(latest_version['created_at']))
-
     return OpenCyclingFeaturesVersion(
         external_id=latest_version['id'],
         url=latest_version['url'],

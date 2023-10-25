@@ -26,15 +26,14 @@ def get_features(db: Session, requested_polygon: Polygon, client_id: int) -> Fea
 
     if cached is None:
         query_polygon = requested_polygon
+
     elif cached.polygon.contains(requested_polygon):
-        print('container', cached.polygon.boundary)
         return FeatureCollection(
             type="FeatureCollection",
             features=[]
         )
     else:
         query_polygon: Polygon = requested_polygon.difference(cached.polygon)
-        print('difference', query_polygon.boundary)
 
     query = db.query(functions.ST_AsGeoJSON(CyclingFeature)).filter(
         functions.ST_Within(

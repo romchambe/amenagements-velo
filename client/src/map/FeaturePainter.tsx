@@ -6,12 +6,16 @@ export const FeaturePainter = () => {
 
   return (
     <>
-      {features.map(({ geometry, properties: { id } }) => (
-        <Feature
-          id={id}
-          positions={geometry.coordinates.map(([lng, lat]) => ({ lat, lng }))}
-        />
-      ))}
+      {features.map(({ geometry, properties }) => {
+        const { id } = properties;
+        return (
+          <Feature
+            key={id}
+            positions={geometry.coordinates.map(([lng, lat]) => ({ lat, lng }))}
+            properties={properties}
+          />
+        );
+      })}
     </>
   );
 };

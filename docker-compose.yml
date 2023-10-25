@@ -21,28 +21,18 @@ services:
     container_name: backend
     build: ./backend
     volumes:
-      # Mount the root folder that contains .git
-      - .:/code:cached
+      - ./backend/src:/code/app 
+      - ./backend/data:/usr/local/miniconda3/lib/python3.11/site-packages
     ports:
       - 8000:8000
     environment:
       - POSTGRES_DB=mvav-dev
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - JWT_SECRET_KEY=hackme
     depends_on:
       db:
         condition: service_healthy
-  client: 
-    container_name: client
-    build: ./client
-    command: yarn dev --port 3000 --host 0.0.0.0
-    volumes:
-      # this is needed so that node_modules are not erased by the host volume when starting the container 
-      - /code/client/node_modules
-      # Mount the root folder that contains .git
-      - .:/code:cached
-    ports: 
-      - 3000:3000
 
 volumes:
   mvav_data:

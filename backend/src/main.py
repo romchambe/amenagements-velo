@@ -8,11 +8,8 @@ from .core.cache import Cache
 from .core.utils import get_polygon_from_ne_sw
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
-from dotenv import load_dotenv
 from shapely.ops import unary_union
 
-
-load_dotenv()
 
 app = FastAPI()
 

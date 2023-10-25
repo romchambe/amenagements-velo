@@ -16,9 +16,10 @@ ENV PYTHONDONTWRITEBYTECODE=1
 RUN conda install --channel conda-forge geopandas
 
 # Install standard python deps and start server
-WORKDIR /code/backend
+WORKDIR /code
 
 COPY requirements.txt .
+COPY alembic.ini .
 RUN pip install --no-cache-dir -r requirements.txt
 
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
