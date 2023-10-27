@@ -1,14 +1,16 @@
-from fastapi import FastAPI, Depends, Query, Header
-from .cycling_features.refresh_features import refresh_features
-from .cycling_features.get_features import get_features, GetFeaturesResponse
-from sqlalchemy.orm import Session
-from .core.database import get_db
-from .core.request import create_token, decode_token
-from .core.cache import Cache
-from .core.utils import get_polygon_from_ne_sw
-from fastapi.middleware.cors import CORSMiddleware
 from typing import Annotated
-from shapely.ops import unary_union
+from fastapi.middleware.cors import CORSMiddleware
+from .core.utils import get_polygon_from_ne_sw
+from .core.request import create_token, decode_token
+from .core.database import get_db
+from sqlalchemy.orm import Session
+from .cycling_features.get_features import get_features, GetFeaturesResponse
+from .cycling_features.refresh_features import refresh_features
+from fastapi import FastAPI, Depends, Query, Header
+from dotenv import load_dotenv
+
+
+load_dotenv()
 
 
 app = FastAPI()

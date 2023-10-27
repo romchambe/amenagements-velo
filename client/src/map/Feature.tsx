@@ -1,7 +1,7 @@
 import { LatLngExpression } from "leaflet";
 import { Polyline, Popup } from "react-leaflet";
 import { InternalFeatureProperties } from "./feature.type";
-import { useState } from "react";
+import { memo, useState } from "react";
 import { useFeaturesContext } from "./CyclingFeaturesProvider";
 
 interface FeatureProps {
@@ -29,7 +29,7 @@ const getLineWeight = (zoom: number) => {
   } else return 4;
 };
 
-export const Feature = ({ positions, properties }: FeatureProps) => {
+export const Feature = memo(({ positions, properties }: FeatureProps) => {
   const [hovered, setHovered] = useState(false);
   const { zoomLevel } = useFeaturesContext();
 
@@ -52,4 +52,4 @@ export const Feature = ({ positions, properties }: FeatureProps) => {
       <Popup>{JSON.stringify(properties)}</Popup>
     </Polyline>
   );
-};
+});

@@ -12,12 +12,13 @@ ENV PATH="/usr/local/miniconda3/bin:$PATH"
 # Disable writing of bytecode files
 ENV PYTHONDONTWRITEBYTECODE=1
 
-# Install geopandas with conda
-RUN conda install --channel conda-forge geopandas
+# Install geopandas and psycopg with conda
+RUN conda install --channel conda-forge psycopg2 geopandas
 
 # Install standard python deps and start server
 WORKDIR /code
 
+COPY src src
 COPY requirements.txt .
 COPY alembic.ini .
 RUN pip install --no-cache-dir -r requirements.txt

@@ -96,6 +96,7 @@ export const CyclingFeaturesProvider: FC<Props> = memo(() => {
 
     if (data?.collection.features) {
       const nextFeatures = data?.collection.features;
+
       setFeatures((prevFeaturesStore) => {
         const nextFeaturesStore = nextFeatures.reduce<
           Record<number, Feature<InternalFeatureProperties>>

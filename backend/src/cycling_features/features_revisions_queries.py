@@ -1,4 +1,4 @@
-from src.core.models import CyclingFeatureRevision
+from ..core.models import CyclingFeatureRevision
 from sqlalchemy.orm import Session
 from .fetch_latest_version import OpenCyclingFeaturesVersion
 from datetime import datetime

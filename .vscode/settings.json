@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "ms-python.autopep8"
   },
   "python.analysis.extraPaths": [
-    "${workspaceFolder}/backend/data"
+    "/Users/romchambe/miniconda3/envs/mvav/lib/python3.11/site-packages"
   ],
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"

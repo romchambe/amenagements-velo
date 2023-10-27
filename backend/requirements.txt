@@ -1,10 +1,10 @@
 fastapi
 uvicorn
 pydantic
-psycopg2
 geojsplit
 SQLAlchemy
 alembic
 GeoAlchemy2
 geojson-pydantic
 PyJWT
+dotenv

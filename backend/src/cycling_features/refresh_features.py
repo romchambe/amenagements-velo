@@ -1,5 +1,5 @@
 
-from src.core.database import engine
+from ..core.database import engine
 from pathlib import Path
 from geojsplit import geojsplit
 from geopandas import GeoDataFrame

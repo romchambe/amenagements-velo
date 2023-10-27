@@ -17,22 +17,6 @@ services:
       interval: 2s
       retries: 10
       timeout: 1s
-  backend:
-    container_name: backend
-    build: ./backend
-    volumes:
-      - ./backend/src:/code/app 
-      - ./backend/data:/usr/local/miniconda3/lib/python3.11/site-packages
-    ports:
-      - 8000:8000
-    environment:
-      - POSTGRES_DB=mvav-dev
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
-      - JWT_SECRET_KEY=hackme
-    depends_on:
-      db:
-        condition: service_healthy
 
 volumes:
   mvav_data:

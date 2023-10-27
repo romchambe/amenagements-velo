@@ -2,6 +2,9 @@ from datetime import datetime, timedelta, timezone
 import os
 import jwt
 from .cache import cache
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 jwt_secret = os.getenv("JWT_SECRET_KEY")
